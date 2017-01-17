@@ -25,6 +25,8 @@ services:
                 - INSTALL_V8JS_EXTENSION=false
                 - COMPOSER_GLOBAL_INSTALL=false
                 - INSTALL_WORKSPACE_SSH=false
+                - INSTALL_LARAVEL_ENVOY=false
+                - INSTALL_LINUXBREW=false
                 - PUID=1000
                 - PGID=1000
                 - NODE_VERSION=stable
@@ -117,7 +119,7 @@ services:
 ### MySQL Container #########################################
 
     mysql:
-        build: 
+        build:
             context: ./mysql
             args:
                 - MYSQL_DATABASE=homestead
@@ -134,7 +136,7 @@ services:
     mariadb:
         build: ./mariadb
         volumes:
-            - mysql:/var/lib/mysql
+            - mariadb:/var/lib/mysql
         ports:
             - "3306:3306"
         environment:
@@ -189,6 +191,15 @@ services:
             - "27017:27017"
         volumes:
             - mongo:/data/db
+
+### RethinkDB Container #######################################
+
+    rethinkdb:
+        build: ./rethinkdb
+        ports:
+            - "8090:8080"
+        volumes:
+            - rethinkdb:/data/rethinkdb_data
 
 ### Redis Container #########################################
 
@@ -314,6 +325,13 @@ services:
         links:
             - php-fpm
 
+### Selenium Container #########################################
+
+    selenium:
+        build: ./selenium
+        ports:
+            - "4444:4444"
+
 ### Volumes Setup ###########################################
 
 volumes:
@@ -330,6 +348,8 @@ volumes:
     mariadb:
         driver: "local"
     mongo:
+        driver: "local"
+    rethinkdb:
         driver: "local"
     phpmyadmin:
         driver: "local"
